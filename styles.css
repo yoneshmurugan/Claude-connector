@@ -1,0 +1,534 @@
+/* styles.css — Claude Connector Shell Theme */
+/* Dark theme to match Claude's aesthetic. Includes webview positioning. */
+
+:root {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --bg-sidebar: #0f0f23;
+  --bg-toolbar: #12122a;
+  --accent: #e94560;
+  --accent-hover: #ff6b81;
+  --accent-glow: rgba(233, 69, 96, 0.3);
+  --text-primary: #eaeaea;
+  --text-secondary: #8892a4;
+  --text-muted: #555e6e;
+  --border: #2a2a4a;
+  --success: #2ecc71;
+  --warning: #f39c12;
+  --error: #e74c3c;
+  --sidebar-width: 64px;
+  --toolbar-height: 48px;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius: 8px;
+  --transition: 0.2s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: var(--font);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Sidebar ────────────────────────────────────────────────────────────── */
+
+#sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: calc(100% - var(--toolbar-height));
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 12px;
+  z-index: 100;
+}
+
+#sidebar-logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--accent), #c0392b);
+  box-shadow: 0 2px 12px var(--accent-glow);
+}
+
+.logo-icon {
+  font-size: 20px;
+  filter: brightness(1.2);
+}
+
+#account-tabs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.account-tab {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.account-tab:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+  background: rgba(233, 69, 96, 0.1);
+}
+
+.account-tab.active {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, rgba(233, 69, 96, 0.2), rgba(233, 69, 96, 0.05));
+  color: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.account-tab.active::before {
+  content: '';
+  position: absolute;
+  left: -13px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background: var(--accent);
+  border-radius: 0 4px 4px 0;
+}
+
+.account-tab-wrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.account-tab-wrapper > .account-tab {
+  width: 100%;
+  height: 100%;
+}
+
+.remove-tab-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all var(--transition);
+}
+
+.account-tab-wrapper:hover .remove-tab-btn {
+  opacity: 1;
+}
+
+.remove-tab-btn:hover {
+  background: var(--error);
+  color: white;
+  border-color: var(--error);
+}
+
+#add-account-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  border: 1px dashed var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+#add-account-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(233, 69, 96, 0.08);
+}
+
+#add-account-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ─── Webview Container ──────────────────────────────────────────────────── */
+#webview-container {
+  position: absolute;
+  top: 0;
+  left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
+  height: calc(100% - var(--toolbar-height));
+  background: var(--bg-primary);
+  z-index: 10;
+}
+
+webview {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* Hide inactive webviews off-screen so they stay alive but aren't clickable/visible */
+webview.hidden {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+}
+
+/* ─── Bottom Toolbar ─────────────────────────────────────────────────────── */
+
+#toolbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--toolbar-height);
+  background: var(--bg-toolbar);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 0 calc(var(--sidebar-width) + 16px);
+  z-index: 100;
+}
+
+#toolbar-left {
+  display: flex;
+  align-items: center;
+}
+
+#toolbar-center {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#toolbar-right {
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* Status Indicator */
+#status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+#status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: background var(--transition);
+}
+
+.status-ready #status-dot { background: var(--success); }
+.status-ready #status-text { color: var(--success); }
+
+.status-working #status-dot {
+  background: var(--warning);
+  animation: pulse 1s ease-in-out infinite;
+}
+.status-working #status-text { color: var(--warning); }
+
+.status-error #status-dot { background: var(--error); }
+.status-error #status-text { color: var(--error); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Extend Convo Button */
+#extend-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: none;
+  background: linear-gradient(135deg, var(--accent), #c0392b);
+  color: white;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+#extend-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+#extend-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+#extend-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.extend-icon {
+  font-size: 14px;
+}
+
+.secondary-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.secondary-btn:hover {
+  border-color: var(--accent);
+  background: rgba(233, 69, 96, 0.1);
+  color: var(--accent);
+}
+
+.export-icon {
+  font-size: 14px;
+}
+
+.toolbar-label {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+#target-account-select {
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+#target-account-select:hover {
+  border-color: var(--accent);
+}
+
+#target-account-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+/* ─── Toast Notifications ────────────────────────────────────────────────── */
+
+#toast-container {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 500;
+  color: white;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+  max-width: 350px;
+}
+
+.toast-success {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+
+.toast-error {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+}
+
+.toast-warning {
+  background: linear-gradient(135deg, #e67e22, #f39c12);
+}
+
+.toast-info {
+  background: linear-gradient(135deg, #2980b9, #3498db);
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* ─── Vault Panel (Right Side) ───────────────────────────────────────────── */
+
+#vault-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 250px;
+  height: calc(100% - var(--toolbar-height));
+  background: var(--bg-sidebar);
+  border-left: 1px solid var(--border);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition);
+}
+
+#vault-panel.hidden {
+  transform: translateX(100%);
+}
+
+.vault-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#vault-drop-zone {
+  margin: 16px;
+  padding: 24px 16px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  transition: all var(--transition);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+#vault-drop-zone.dragover {
+  border-color: var(--accent);
+  background: rgba(233, 69, 96, 0.05);
+  color: var(--accent);
+}
+
+#vault-file-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vault-file-item {
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: border-color var(--transition);
+}
+
+.vault-file-item:active {
+  cursor: grabbing;
+}
+
+.vault-file-item:hover {
+  border-color: var(--accent);
+}
+
+.vault-file-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  pointer-events: none;
+}
+
+.vault-file-delete {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.vault-file-delete:hover {
+  color: var(--error);
+  background: rgba(231, 76, 60, 0.1);
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+  margin: 0 12px;
+}
+

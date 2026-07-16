@@ -1,0 +1,44 @@
+{
+  "name": "claude-connector",
+  "version": "1.0.0",
+  "description": "Multi-account Claude wrapper with conversation bridging",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "build": {
+    "appId": "com.claude-connector.app",
+    "productName": "Claude Connector",
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "webview-preload.js",
+      "renderer.js",
+      "scraper.js",
+      "payload-formatter.js",
+      "auto-paster.js",
+      "menu.js",
+      "index.html",
+      "styles.css",
+      "assets/**/*"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^43.1.1",
+    "electron-builder": "^26.15.3"
+  }
+}

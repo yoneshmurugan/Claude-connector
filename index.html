@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Connector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ─── Sidebar ──────────────────────────────────────────────── -->
+  <aside id="sidebar">
+    <div id="sidebar-logo">
+      <span class="logo-icon">⚡</span>
+    </div>
+
+    <nav id="account-tabs">
+      <!-- Account tabs rendered by renderer.js -->
+    </nav>
+
+    <button id="add-account-btn" title="Add Account (max 5)">
+      <span>+</span>
+    </button>
+  </aside>
+
+  <!-- ─── Main Content: Webview Container ──────────────────────── -->
+  <main id="webview-container">
+    <!-- Webviews are created dynamically by renderer.js -->
+  </main>
+
+  <!-- ─── Right Panel: Context Vault ───────────────────────────── -->
+  <aside id="vault-panel" class="hidden">
+    <div class="vault-header">
+      <h3>Context Vault</h3>
+    </div>
+    <div id="vault-drop-zone">
+      Drop .md files here
+    </div>
+    <div id="vault-file-list">
+      <!-- File items populated by renderer.js -->
+    </div>
+  </aside>
+
+  <!-- ─── Bottom Toolbar ───────────────────────────────────────── -->
+  <footer id="toolbar">
+    <div id="toolbar-left">
+      <div id="status-indicator" class="status-ready">
+        <span id="status-dot"></span>
+        <span id="status-text">Ready</span>
+      </div>
+    </div>
+
+    <div id="toolbar-center">
+      <button id="export-md-btn" class="secondary-btn" title="Paste prompt to generate MD summary">
+        <span class="export-icon">📝</span>
+        <span>Export MD</span>
+      </button>
+
+      <button id="extend-btn" title="Scrape conversation and paste to target account">
+        <span class="extend-icon">🔄</span>
+        <span>Extend Convo</span>
+      </button>
+
+      <span class="toolbar-label">to</span>
+
+      <select id="target-account-select">
+        <!-- Options populated by renderer.js -->
+      </select>
+    </div>
+
+    <div id="toolbar-right">
+      <span id="account-count">2 / 5</span>
+      <div class="toolbar-divider"></div>
+      <button id="vault-toggle-btn" class="secondary-btn" title="Toggle Context Vault">
+        <span>🗄️ Vault</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- ─── Toast Container ─────────────────────────────────────── -->
+  <div id="toast-container"></div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
