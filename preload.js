@@ -17,6 +17,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Vault Management
   listVaultFiles: () => ipcRenderer.invoke('vault:list'),
   saveVaultFile: (filename, content) => ipcRenderer.invoke('vault:save', filename, content),
+  readVaultFile: (filename) => ipcRenderer.invoke('vault:read', filename),
   deleteVaultFile: (filename) => ipcRenderer.invoke('vault:delete', filename),
   startVaultDrag: (filename) => ipcRenderer.send('vault:drag', filename),
   onVaultAutoSaved: (callback) => ipcRenderer.on('vault:auto-saved', (_event, filename) => callback(filename))

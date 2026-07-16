@@ -115,6 +115,15 @@ ipcMain.handle('vault:save', (_event, filename, content) => {
   }
 });
 
+ipcMain.handle('vault:read', (_event, filename) => {
+  try {
+    const content = fs.readFileSync(path.join(vaultDir, filename), 'utf-8');
+    return { success: true, content };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+});
+
 ipcMain.handle('vault:delete', (_event, filename) => {
   try {
     fs.unlinkSync(path.join(vaultDir, filename));
@@ -134,8 +143,8 @@ ipcMain.on('vault:drag', (event, filename) => {
   }
 
   try {
-    const iconBase64 = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAzSURBVFhH7c2xCQAgEEPRXHY2N3YjN3cjt+iCg4UKyfs+yOAlAwAAAAAAAICTO2tdX2u+aYI9oN4AAAAASUVORK5CYII=";
-    const icon = nativeImage.createFromDataURL('data:image/png;base64,' + iconBase64);
+    const iconPath = path.join(__dirname, 'drag-icon.icns');
+    const icon = nativeImage.createFromPath(iconPath);
     
     console.log(`[Main] Calling event.sender.startDrag...`);
     event.sender.startDrag({
@@ -154,10 +163,6 @@ app.whenReady().then(() => {
   // Build native menu (required for Cmd+C/V on macOS)
   const menu = buildMenu();
   Menu.setApplicationMenu(menu);
-
-  // Pre-configure sessions for the initial 2 accounts
-  configureSession('persist:acc1');
-  configureSession('persist:acc2');
 
   // Create the main window
   mainWindow = new BrowserWindow({

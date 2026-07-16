@@ -367,9 +367,9 @@ async function refreshVault() {
     item.className = 'vault-file-item';
     item.draggable = true; // Enable HTML5 dragging
     
-    // Prevent default drag and start Electron native drag!
+    // Start Electron native drag
     item.addEventListener('dragstart', (e) => {
-      e.preventDefault();
+      // e.preventDefault(); // Temporarily removed to see if HTML5 drag fallback works
       window.electronAPI.startVaultDrag(file.name);
     });
 
@@ -377,6 +377,49 @@ async function refreshVault() {
     nameSpan.className = 'vault-file-name';
     nameSpan.textContent = file.name;
     nameSpan.title = file.name;
+
+    const actionDiv = document.createElement('div');
+    actionDiv.style.display = 'flex';
+    actionDiv.style.gap = '4px';
+
+    const injectBtn = document.createElement('button');
+    injectBtn.className = 'vault-file-delete'; // Reuse styles
+    injectBtn.innerHTML = '📤';
+    injectBtn.title = 'Inject into Chat';
+    injectBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const activeAcc = accounts.find(a => a.id === activeAccountId);
+      if (!activeAcc) return;
+
+      try {
+        const res = await window.electronAPI.readVaultFile(file.name);
+        if (!res.success) throw new Error(res.error);
+        
+        const content = res.content;
+        const escapedContent = content.replace(/\n/g, '\\n').replace(/"/g, '\\"').replace(/'/g, "\\'");
+        
+        const fillScript = `
+          (function() {
+            const editor = document.querySelector('.ProseMirror');
+            if (editor) {
+              editor.focus();
+              document.execCommand('insertText', false, '${escapedContent}');
+              return true;
+            }
+            return false;
+          })()
+        `;
+        
+        const success = await activeAcc.webview.executeJavaScript(fillScript);
+        if (success) {
+          showToast(`${file.name} injected!`, 'success');
+        } else {
+          showToast(`Chat box not found.`, 'error');
+        }
+      } catch (err) {
+        showToast(`Error: ${err.message}`, 'error');
+      }
+    });
 
     const delBtn = document.createElement('button');
     delBtn.className = 'vault-file-delete';
@@ -389,8 +432,11 @@ async function refreshVault() {
       showToast(`${file.name} deleted`, 'info');
     });
 
+    actionDiv.appendChild(injectBtn);
+    actionDiv.appendChild(delBtn);
+
     item.appendChild(nameSpan);
-    item.appendChild(delBtn);
+    item.appendChild(actionDiv);
     vaultFileList.appendChild(item);
   });
 }
