@@ -75,52 +75,59 @@ Find your compiled builds in the `dist/` folder.
 
 ```mermaid
 graph TD
-    %% Define Styles
     classDef mainProcess fill:#1e1e38,stroke:#a855f7,stroke-width:2px,color:#fff,rx:8px
     classDef renderer fill:#2a2a4a,stroke:#6366f1,stroke-width:2px,color:#fff,rx:8px
     classDef webview fill:#111122,stroke:#06b6d4,stroke-width:2px,color:#fff,rx:5px
     classDef script fill:#312e81,stroke:#818cf8,stroke-width:1px,color:#e0e7ff,rx:4px
 
-    %% Main Process
-    subgraph Main Process [Node.js Backend]
-        Main[main.js]:::mainProcess
-        Headers[Header Interceptor]:::mainProcess
-        Vault[Vault File System]:::mainProcess
+    subgraph Backend ["Node.js Main Process"]
+        Main["main.js"]:::mainProcess
+        Headers["Header Interceptor"]:::mainProcess
+        Vault["Vault File System"]:::mainProcess
     end
 
-    %% Renderer Process
-    subgraph Renderer Process [Chromium Frontend]
-        UI[UI / Sidebar / App State]:::renderer
-        Webview1[<webview> Account 1]:::webview
-        Webview2[<webview> Account 2]:::webview
+    subgraph Frontend ["Chromium Renderer Process"]
+        UI["UI / Sidebar / App State"]:::renderer
+        Webview1["Webview Partition 1"]:::webview
+        Webview2["Webview Partition 2"]:::webview
         
-        Scraper[scraper.js]:::script
-        Paster[auto-paster.js]:::script
+        Scraper["scraper.js"]:::script
+        Paster["auto-paster.js"]:::script
     end
 
-    %% External
-    ClaudeAI((Claude.ai\nServers))
+    ClaudeAI(("Claude.ai Servers"))
 
-    %% Relationships
-    Main <-->|IPC Bridge| UI
-    Main -->|Spoofs User-Agent| Headers
-    Main <-->|Read/Write .md files| Vault
+    Main <-->|"IPC Bridge"| UI
+    Main -->|"Spoofs User-Agent"| Headers
+    Main <-->|"Read/Write .md files"| Vault
 
-    UI -->|Spawns| Webview1
-    UI -->|Spawns| Webview2
+    UI -->|"Spawns"| Webview1
+    UI -->|"Spawns"| Webview2
 
-    Webview1 -->|Injects| Scraper
-    Webview2 -->|Injects| Paster
+    Webview1 -->|"Injects"| Scraper
+    Webview2 -->|"Injects"| Paster
 
-    Webview1 -.->|Outbound HTTP| Headers
-    Webview2 -.->|Outbound HTTP| Headers
+    Webview1 -.->|"Outbound HTTP"| Headers
+    Webview2 -.->|"Outbound HTTP"| Headers
 
-    Headers -.->|Bypasses Cloudflare| ClaudeAI
+    Headers -.->|"Bypasses Cloudflare"| ClaudeAI
 ```
 
 * **Main Process (`src/main/`):** Manages the Electron lifecycle, window creation, native file system access for the Context Vault, and intercepting/spoofing HTTP headers.
 * **Renderer Process (`src/renderer/`):** Manages the frontend UI. It dynamically spawns `<webview>` tags and handles the logic for switching tabs, updating the Vault UI, and triggering IPC events.
 * **Injection Scripts (`src/scripts/`):** JavaScript files that are executed *inside* the isolated Claude webviews using `webview.executeJavaScript()`.
+
+---
+
+## 🔮 Future Works / Roadmap
+
+Here are some powerful features and architectural upgrades planned for the future:
+
+* **🛡️ Per-Account IP Proxies (Ultimate Anti-Ban):** Assign a different proxy server to each webview via Electron's `session.setProxy()`. Account 1 could look like it's in New York, while Account 2 routes through London!
+* **⚡ Global Keyboard Shortcuts:** Summon the app instantly from anywhere on your Mac using a global hotkey, or rapidly snap between accounts using `Cmd + 1` etc.
+* **🧠 Smart Auto-Routing (Load Balancing):** The app could run a quick DOM scrape across all webviews to read message limits, and automatically route your next prompt to the account with the most remaining usage!
+* **🗂️ Claude Artifact Auto-Downloader:** Automatically detect when Claude generates an "Artifact" (React code, HTML, SVG) and instantly download it as a real file to your local hard drive.
+* **🪟 Multi-Monitor Pop-Outs:** Tear a specific `<webview>` out of the main window into its own floating Electron `BrowserWindow` to view accounts side-by-side on dual monitors.
 
 ---
 
