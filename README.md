@@ -34,7 +34,7 @@ Designed with a beautiful, lightweight macOS-native interface, this app allows y
 
 > [!NOTE]
 > **macOS Users:** Because this is an unsigned open-source app, macOS Gatekeeper may show a "Malware" warning the first time you open it. 
-> To bypass this: Go to your Applications folder, **Right-Click** the Claude Connector icon, and select **Open**. Click "Open" again on the warning popup to launch the app!
+> To bypass this: Open **System Settings**, go to **Privacy & Security**, scroll down to the Security section, and click **Open Anyway** next to Claude Connector.
 ---
 
 <br>
