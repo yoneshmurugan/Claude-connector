@@ -3,32 +3,42 @@
   
   # Claude Connector
   
-  **A powerful, multi-account desktop client for Claude.ai with conversation bridging, local context vaulting, and seamless anti-detection.**
+  **The ultimate multi-account desktop client for Claude.ai.**  
+  *Run multiple accounts simultaneously, bypass limits, and share context across chats seamlessly.*
+  
+  <br>
+  
+  [![Download for Mac](https://img.shields.io/badge/Download_for_Mac-DMG-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/yoneshmurugan/Claude-connector/releases/latest)
+  [![Download for Windows](https://img.shields.io/badge/Download_for_Windows-ZIP-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/yoneshmurugan/Claude-connector/releases/latest)
+
 </div>
 
 ---
 
-## ⚡ Overview
+## ⚡ Why use Claude Connector?
 
-**Claude Connector** is an unofficial, highly optimized Electron desktop application designed to supercharge your Claude.ai workflow. 
+If you rely on Claude heavily, you know the pain of hitting message limits and having to manually log out and log back in with a different account. **Claude Connector** solves this entirely. 
 
-Instead of constantly logging in and out of different accounts, this application allows you to run up to 5 completely isolated Claude sessions simultaneously. Furthermore, it introduces revolutionary cross-account features like the ability to "Extend" a conversation from Account A directly into Account B, and a local Context Vault to inject frequently used `.md` files directly into your prompts.
+Designed with a beautiful, lightweight macOS-native interface, this app allows you to:
+* **Run up to 5 Accounts at Once:** Each account is completely isolated. Stay logged into 5 different accounts at the exact same time without them interfering with each other.
+* **Bridge Your Conversations (Extend Convo):** Hit a message limit on Account 1? With one click, the app automatically copies your current conversation and pastes it directly into Account 2 so you never lose your train of thought.
+* **Build a Context Vault:** Save your favorite prompt instructions or long code snippets as Markdown files directly on your computer. Inject them into any Claude chat instantly.
+* **Bypass Restrictions:** The app spoofs its headers so Claude (and Cloudflare) sees your connection as a standard Google Chrome browser, preventing you from being blocked as a "bot."
 
-## ✨ Key Features
+## 🚀 How to Install (For Regular Users)
 
-* **🎭 Multi-Account Isolation:** Run multiple Claude sessions side-by-side. Each account runs in an isolated `<webview>` partition, meaning cookies and local storage are strictly separated. 
-* **🌉 Conversation Bridging (Extend Convo):** Hit a usage limit on Account 1? Click "Extend Convo". The app will silently scrape the DOM of your current chat, parse it into Markdown, and inject it straight into the ProseMirror editor of Account 2 so you can pick up exactly where you left off.
-* **🗄️ Context Vault:** Export any conversation as a clean Markdown file saved directly to your hard drive. Drop your own `.md` files into the Vault panel, and inject them instantly into any Claude chat with a single click.
-* **🛡️ Anti-Detection Built-In:** Claude uses Cloudflare to block automated bots. This app intercepts outbound network requests and dynamically spoofs strict Google Chrome `User-Agent` and `sec-ch-ua` headers, allowing the webviews to bypass security checks entirely.
-* **🎨 Premium macOS Aesthetic:** Built with a stunning, lightweight UI. Features a frameless draggable window, deep violet ambient gradients, glassmorphism elements, and highly optimized, zero-CPU CSS animations.
+1. **Download:** Click one of the Download buttons at the very top of this page.
+2. **Mac Users:** Open the downloaded `.dmg` file and drag the Claude Connector icon into your Applications folder.
+3. **Windows Users:** Extract the downloaded `.zip` file and double-click `Claude Connector.exe` to run the app instantly!
+4. **Login:** Click the `+` button in the app sidebar to add an account. *Important: You must log in using your Email address, as Google Login is blocked by Google for security reasons.*
 
 ---
 
-## 🚀 Getting Started
+<br>
 
-### Prerequisites
-* Node.js (v16 or higher)
-* npm
+# 🧑‍💻 Developer Guide
+
+Want to run the app from the source code or build it yourself? Follow the steps below.
 
 ### Installation
 1. Clone the repository:
@@ -45,34 +55,27 @@ Instead of constantly logging in and out of different accounts, this application
    npm start
    ```
 
----
-
-## 📦 Building for Production
-
-This project uses `electron-builder` to package standalone desktop executables. The build configuration is optimized for macOS (DMG) and Windows (Portable EXE).
+### Building for Production
+This project uses `electron-builder` to package standalone desktop executables. 
 
 **To build the macOS Installer (.dmg):**
 ```bash
 npm run build:mac
 ```
 
-**To build the Windows Executable (.exe):**
+**To build the Windows Executable (.zip):**
 ```bash
 npm run build:win
 ```
-*Note: Due to NSIS architecture limitations on Apple Silicon, the Windows build generates a Portable Executable. This means Windows users can simply double-click the `.exe` to run the app without needing to install it!*
-
 Find your compiled builds in the `dist/` folder.
 
 ---
 
-## 🛠️ Architecture
+## 🛠️ Architecture Overview
 
 * **Main Process (`src/main/`):** Manages the Electron lifecycle, window creation, native file system access for the Context Vault, and intercepting/spoofing HTTP headers.
 * **Renderer Process (`src/renderer/`):** Manages the frontend UI. It dynamically spawns `<webview>` tags and handles the logic for switching tabs, updating the Vault UI, and triggering IPC events.
 * **Injection Scripts (`src/scripts/`):** JavaScript files that are executed *inside* the isolated Claude webviews using `webview.executeJavaScript()`. 
-  * `scraper.js`: Traverses the Claude React DOM to extract messages.
-  * `auto-paster.js`: Simulates `DataTransfer` paste events to inject text directly into Claude's complex ProseMirror rich-text editor.
 
 ---
 
@@ -83,4 +86,4 @@ Claude Connector is not affiliated with, endorsed by, or sponsored by Anthropic.
 
 By using this application, you are wrapping the Claude.ai web interface and utilizing DOM scraping techniques. This violates Anthropic's Terms of Service regarding automated access and web scraping. 
 
-**Use this tool strictly at your own risk.** Excessive automation, superhuman interaction speeds, or running many accounts simultaneously from a single IP address may result in your Claude accounts being flagged or banned by Anthropic. The creators of this repository hold no liability for lost accounts or data.
+**Use this tool strictly at your own risk.** Excessive automation or superhuman interaction speeds may result in your Claude accounts being flagged or banned by Anthropic. The creators of this repository hold no liability for lost accounts or data.
