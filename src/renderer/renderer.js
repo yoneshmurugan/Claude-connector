@@ -69,7 +69,7 @@ function setStatus(state, text) {
 async function createAccount() {
   startPage.classList.add('hidden');
   if (accountCount >= MAX_ACCOUNTS) {
-    showToast('Maximum 5 accounts reached', 'warning');
+    showToast(`Maximum ${MAX_ACCOUNTS} accounts reached`, 'warning');
     return;
   }
 

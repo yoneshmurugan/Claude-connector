@@ -15,17 +15,17 @@
 
 ---
 
-## ⚡ Why use Claude Connector?
+## Why use Claude Connector?
 
 If you rely on Claude heavily, you know the pain of hitting message limits and having to manually log out and log back in with a different account. **Claude Connector** solves this entirely. 
 
 Designed with a beautiful, lightweight macOS-native interface, this app allows you to:
-* **Run up to 5 Accounts at Once:** Each account is completely isolated. Stay logged into 5 different accounts at the exact same time without them interfering with each other.
+* **Run up to 10 Accounts at Once:** Each account is completely isolated. Stay logged into 10 different accounts at the exact same time without them interfering with each other.
 * **Bridge Your Conversations (Extend Convo):** Hit a message limit on Account 1? With one click, the app automatically copies your current conversation and pastes it directly into Account 2 so you never lose your train of thought.
 * **Build a Context Vault:** Save your favorite prompt instructions or long code snippets as Markdown files directly on your computer. Inject them into any Claude chat instantly.
 * **Bypass Restrictions:** The app spoofs its headers so Claude (and Cloudflare) sees your connection as a standard Google Chrome browser, preventing you from being blocked as a "bot."
 
-## 🚀 How to Install (For Regular Users)
+## How to Install (For Regular Users)
 
 1. **Download:** Click one of the Download buttons at the very top of this page.
 2. **Mac Users:** Open the downloaded `.dmg` file and drag the Claude Connector icon into your Applications folder.
@@ -36,7 +36,7 @@ Designed with a beautiful, lightweight macOS-native interface, this app allows y
 
 <br>
 
-# 🧑‍💻 Developer Guide
+# Developer Guide
 
 Want to run the app from the source code or build it yourself? Follow the steps below.
 
@@ -71,7 +71,7 @@ Find your compiled builds in the `dist/` folder.
 
 ---
 
-## 🛠️ Architecture Overview
+## Architecture Overview
 
 * **Main Process (`src/main/`):** Manages the Electron lifecycle, window creation, native file system access for the Context Vault, and intercepting/spoofing HTTP headers.
 * **Renderer Process (`src/renderer/`):** Manages the frontend UI. It dynamically spawns `<webview>` tags and handles the logic for switching tabs, updating the Vault UI, and triggering IPC events.
