@@ -21,7 +21,7 @@
 
     <div id="sidebar-header">
       <div id="sidebar-logo">
-        <img src="icon.png" class="logo-icon" alt="Logo">
+        <img src="../../assets/icon.png" class="logo-icon" alt="Logo">
       </div>
       <span class="sidebar-title">CC</span>
     </div>
@@ -42,6 +42,27 @@
 
   <!-- ─── Main Content: Webview Container ──────────────────────── -->
   <main id="webview-container">
+    
+    <!-- ── Start Page Overlay ── -->
+    <div id="start-page">
+      <div class="start-content">
+        <img src="../../assets/icon.png" class="start-logo" alt="Claude Connector">
+        <h1>Welcome to Claude Connector</h1>
+        <p class="start-subtitle">Manage multiple Claude sessions seamlessly.</p>
+        
+        <div class="start-alert">
+          <div class="alert-text">
+            <strong>Important Login Note</strong>
+            <p>Please log in using your <strong>Email address</strong>.</p>
+          </div>
+        </div>
+
+        <button id="start-btn" class="primary-btn">
+          <span>Get Started</span>
+        </button>
+      </div>
+    </div>
+    
     <!-- Webviews are created dynamically by renderer.js -->
   </main>
 

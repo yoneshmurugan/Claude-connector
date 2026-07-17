@@ -1,8 +1,8 @@
 {
   "name": "claude-connector",
   "version": "1.0.0",
-  "description": "Multi-account Claude wrapper with conversation bridging",
-  "main": "main.js",
+  "description": "Multi-account Claude interface with web wrapping",
+  "main": "src/main/main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder"

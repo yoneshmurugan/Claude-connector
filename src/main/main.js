@@ -73,13 +73,13 @@ ipcMain.handle('configure-session', (_event, partitionName) => {
 // Read scraper.js content (so renderer can inject it into webviews)
 ipcMain.handle('get-scraper-script', () => {
   const fs = require('fs');
-  return fs.readFileSync(path.join(__dirname, 'scraper.js'), 'utf-8');
+  return fs.readFileSync(path.join(__dirname, '../scripts/scraper.js'), 'utf-8');
 });
 
 // Read auto-paster.js content
 ipcMain.handle('get-paster-script', () => {
   const fs = require('fs');
-  return fs.readFileSync(path.join(__dirname, 'auto-paster.js'), 'utf-8');
+  return fs.readFileSync(path.join(__dirname, '../scripts/auto-paster.js'), 'utf-8');
 });
 
 // Open URL in system browser (for Google OAuth)
@@ -91,7 +91,7 @@ ipcMain.handle('open-external', (_event, url) => {
 // ─── Vault Handlers ──────────────────────────────────────────────────────────
 
 const fs = require('fs');
-const vaultDir = path.join(__dirname, 'vault');
+const vaultDir = path.join(__dirname, '../../vault');
 if (!fs.existsSync(vaultDir)) fs.mkdirSync(vaultDir);
 
 ipcMain.handle('vault:list', () => {
@@ -146,7 +146,7 @@ ipcMain.on('vault:drag', (event, filename) => {
   }
 
   try {
-    const iconPath = path.join(__dirname, 'drag-icon.icns');
+    const iconPath = path.join(__dirname, '../../assets/drag-icon.icns');
     const icon = nativeImage.createFromPath(iconPath);
     
     console.log(`[Main] Calling event.sender.startDrag...`);
@@ -169,7 +169,7 @@ app.whenReady().then(() => {
 
   // Set macOS dock icon
   if (process.platform === 'darwin') {
-    app.dock.setIcon(path.join(__dirname, 'icon.png'));
+    app.dock.setIcon(path.join(__dirname, '../../assets/icon.png'));
   }
 
   // Create the main window
@@ -180,11 +180,11 @@ app.whenReady().then(() => {
     minHeight: 600,
     title: 'Claude Connector',
     backgroundColor: '#0a0a1a',
-    icon: path.join(__dirname, 'icon.png'),
+    icon: path.join(__dirname, '../../assets/icon.png'),
     titleBarStyle: 'hiddenInset',
     trafficLightPosition: { x: 16, y: 12 },
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, '../preload/preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,
@@ -192,7 +192,7 @@ app.whenReady().then(() => {
     },
   });
 
-  mainWindow.loadFile('index.html');
+  mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
 
   mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
     console.log(`[Renderer] ${message} (${sourceId}:${line})`);

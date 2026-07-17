@@ -18,6 +18,13 @@ const statusIndicator = document.getElementById('status-indicator');
 const statusText = document.getElementById('status-text');
 const accountCountDisplay = document.getElementById('account-count');
 const toastContainer = document.getElementById('toast-container');
+const startPage = document.getElementById('start-page');
+const startBtn = document.getElementById('start-btn');
+
+startBtn.addEventListener('click', () => {
+  startPage.classList.add('hidden');
+  if (accountCount === 0) createAccount();
+});
 
 // ─── Toast & Status ──────────────────────────────────────────────────────────
 const TOAST_ICONS = {
@@ -60,6 +67,7 @@ function setStatus(state, text) {
 // ─── Account Management ──────────────────────────────────────────────────────
 
 async function createAccount() {
+  startPage.classList.add('hidden');
   if (accountCount >= MAX_ACCOUNTS) {
     showToast('Maximum 5 accounts reached', 'warning');
     return;
@@ -74,9 +82,9 @@ async function createAccount() {
 
     // Create the webview element
     const webview = document.createElement('webview');
-    webview.setAttribute('src', 'https://claude.ai');
+    webview.setAttribute('src', 'https://claude.ai/new');
     webview.setAttribute('partition', partitionName);
-    webview.setAttribute('preload', './webview-preload.js');
+    webview.setAttribute('preload', '../preload/webview-preload.js');
     webview.setAttribute('disablewebsecurity', 'false'); // Let standard web security apply
     webview.className = 'hidden'; // Hide initially
 
@@ -534,9 +542,7 @@ window.electronAPI.onVaultAutoSaved((filename) => {
 
 // ─── Initialize ──────────────────────────────────────────────────────────────
 
-// Create first two accounts on launch
 (async () => {
-  await createAccount();
-  await createAccount();
+  // We no longer create accounts on launch so the Start Page is visible.
   setStatus('ready', 'Ready');
 })();
