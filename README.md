@@ -30,8 +30,10 @@ Designed with a beautiful, lightweight macOS-native interface, this app allows y
 1. **Download:** Click one of the Download buttons at the very top of this page.
 2. **Mac Users:** Open the downloaded `.dmg` file and drag the Claude Connector icon into your Applications folder.
 3. **Windows Users:** Extract the downloaded `.zip` file and double-click `Claude Connector.exe` to run the app instantly!
-4. **Login:** Click the `+` button in the app sidebar to add an account. *Important: You must log in using your Email address, as Google Login is blocked by Google for security reasons.*
+4. **Login:** Click the `+` button in the app sidebar to add an account.
 
+> [!IMPORTANT]
+> **Do NOT use Google Login!** Google blocks OAuth logins inside custom embedded browsers for security reasons. You **must** log in using your Email Address directly.
 > [!NOTE]
 > **macOS Users:** Because this is an unsigned open-source app, macOS Gatekeeper may show a "Malware" warning the first time you open it. 
 > To bypass this: Open **System Settings**, go to **Privacy & Security**, scroll down to the Security section, and click **Open Anyway** next to Claude Connector.
