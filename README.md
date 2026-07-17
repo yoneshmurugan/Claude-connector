@@ -73,9 +73,54 @@ Find your compiled builds in the `dist/` folder.
 
 ## Architecture Overview
 
+```mermaid
+graph TD
+    %% Define Styles
+    classDef mainProcess fill:#1e1e38,stroke:#a855f7,stroke-width:2px,color:#fff,rx:8px
+    classDef renderer fill:#2a2a4a,stroke:#6366f1,stroke-width:2px,color:#fff,rx:8px
+    classDef webview fill:#111122,stroke:#06b6d4,stroke-width:2px,color:#fff,rx:5px
+    classDef script fill:#312e81,stroke:#818cf8,stroke-width:1px,color:#e0e7ff,rx:4px
+
+    %% Main Process
+    subgraph Main Process [Node.js Backend]
+        Main[main.js]:::mainProcess
+        Headers[Header Interceptor]:::mainProcess
+        Vault[Vault File System]:::mainProcess
+    end
+
+    %% Renderer Process
+    subgraph Renderer Process [Chromium Frontend]
+        UI[UI / Sidebar / App State]:::renderer
+        Webview1[<webview> Account 1]:::webview
+        Webview2[<webview> Account 2]:::webview
+        
+        Scraper[scraper.js]:::script
+        Paster[auto-paster.js]:::script
+    end
+
+    %% External
+    ClaudeAI((Claude.ai\nServers))
+
+    %% Relationships
+    Main <-->|IPC Bridge| UI
+    Main -->|Spoofs User-Agent| Headers
+    Main <-->|Read/Write .md files| Vault
+
+    UI -->|Spawns| Webview1
+    UI -->|Spawns| Webview2
+
+    Webview1 -->|Injects| Scraper
+    Webview2 -->|Injects| Paster
+
+    Webview1 -.->|Outbound HTTP| Headers
+    Webview2 -.->|Outbound HTTP| Headers
+
+    Headers -.->|Bypasses Cloudflare| ClaudeAI
+```
+
 * **Main Process (`src/main/`):** Manages the Electron lifecycle, window creation, native file system access for the Context Vault, and intercepting/spoofing HTTP headers.
 * **Renderer Process (`src/renderer/`):** Manages the frontend UI. It dynamically spawns `<webview>` tags and handles the logic for switching tabs, updating the Vault UI, and triggering IPC events.
-* **Injection Scripts (`src/scripts/`):** JavaScript files that are executed *inside* the isolated Claude webviews using `webview.executeJavaScript()`. 
+* **Injection Scripts (`src/scripts/`):** JavaScript files that are executed *inside* the isolated Claude webviews using `webview.executeJavaScript()`.
 
 ---
 
