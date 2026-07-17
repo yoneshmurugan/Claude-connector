@@ -8,8 +8,8 @@
   
   <br>
   
-  [![Download for Mac](https://img.shields.io/badge/Download_for_Mac-DMG-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/yoneshmurugan/Claude-connector/releases/latest)
-  [![Download for Windows](https://img.shields.io/badge/Download_for_Windows-ZIP-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/yoneshmurugan/Claude-connector/releases/latest)
+  [![Download for Mac](https://img.shields.io/badge/Download_for_Mac-DMG-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/yoneshmurugan/Claude-connector/releases/download/v1.0.0/Claude.Connector-1.0.0-arm64.dmg)
+  [![Download for Windows](https://img.shields.io/badge/Download_for_Windows-ZIP-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/yoneshmurugan/Claude-connector/releases/download/v1.0.0/Claude.Connector-1.0.0-arm64-win.zip)
 
 </div>
 
