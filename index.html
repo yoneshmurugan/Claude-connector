@@ -6,23 +6,37 @@
   <title>Claude Connector</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+  <!-- ─── Custom Title Bar ────────────────────────────────────────── -->
+  <header id="titlebar">
+    <span id="titlebar-text">Claude Connector</span>
+  </header>
+
   <!-- ─── Sidebar ──────────────────────────────────────────────── -->
   <aside id="sidebar">
-    <div id="sidebar-logo">
-      <span class="logo-icon">⚡</span>
+
+    <div id="sidebar-header">
+      <div id="sidebar-logo">
+        <img src="icon.png" class="logo-icon" alt="Logo">
+      </div>
+      <span class="sidebar-title">CC</span>
     </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section-label">Accounts</div>
 
     <nav id="account-tabs">
       <!-- Account tabs rendered by renderer.js -->
     </nav>
 
-    <button id="add-account-btn" title="Add Account (max 5)">
-      <span>+</span>
+    <button id="add-account-btn" title="Add Account (max 10)">
+      <span class="add-icon">+</span>
+      <span class="add-label">Add</span>
     </button>
   </aside>
 
@@ -34,10 +48,13 @@
   <!-- ─── Right Panel: Context Vault ───────────────────────────── -->
   <aside id="vault-panel" class="hidden">
     <div class="vault-header">
-      <h3>Context Vault</h3>
+      <h3>🗄️ Context Vault</h3>
+      <span class="vault-badge" id="vault-count">0</span>
     </div>
     <div id="vault-drop-zone">
-      Drop .md files here
+      <span class="drop-icon">📂</span>
+      <span class="drop-text">Drop .md files here</span>
+      <span class="drop-hint">or download from Claude</span>
     </div>
     <div id="vault-file-list">
       <!-- File items populated by renderer.js -->
@@ -46,6 +63,7 @@
 
   <!-- ─── Bottom Toolbar ───────────────────────────────────────── -->
   <footer id="toolbar">
+
     <div id="toolbar-left">
       <div id="status-indicator" class="status-ready">
         <span id="status-dot"></span>
@@ -54,17 +72,17 @@
     </div>
 
     <div id="toolbar-center">
-      <button id="export-md-btn" class="secondary-btn" title="Paste prompt to generate MD summary">
-        <span class="export-icon">📝</span>
-        <span>Export MD</span>
+      <button id="export-md-btn" class="toolbar-btn btn-ghost" data-tooltip="Paste a prompt into Claude to export conversation as Markdown">
+        <span class="btn-icon">📝</span>
+        <span class="btn-text">Export MD</span>
       </button>
 
-      <button id="extend-btn" title="Scrape conversation and paste to target account">
-        <span class="extend-icon">🔄</span>
-        <span>Extend Convo</span>
+      <button id="extend-btn" class="toolbar-btn btn-primary" data-tooltip="Copy conversation from this tab and paste it into the target account">
+        <span class="btn-icon">🔄</span>
+        <span class="btn-text">Extend Convo</span>
       </button>
 
-      <span class="toolbar-label">to</span>
+      <span class="toolbar-label">TO</span>
 
       <select id="target-account-select">
         <!-- Options populated by renderer.js -->
@@ -72,10 +90,10 @@
     </div>
 
     <div id="toolbar-right">
-      <span id="account-count">2 / 5</span>
-      <div class="toolbar-divider"></div>
-      <button id="vault-toggle-btn" class="secondary-btn" title="Toggle Context Vault">
-        <span>🗄️ Vault</span>
+      <span id="account-count" class="badge">2 / 10</span>
+      <button id="vault-toggle-btn" class="toolbar-btn btn-ghost" data-tooltip="Open the Context Vault to manage saved MD files">
+        <span class="btn-icon">🗄️</span>
+        <span class="btn-text">Vault</span>
       </button>
     </div>
   </footer>

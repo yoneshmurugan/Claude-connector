@@ -5,7 +5,7 @@
 let activeAccountId = null;
 let accountCount = 0;
 let nextAccountId = 1;
-const MAX_ACCOUNTS = 5;
+const MAX_ACCOUNTS = 10;
 const accounts = []; // Array of { id, webview }
 
 // ─── DOM Elements ────────────────────────────────────────────────────────────
@@ -20,11 +20,33 @@ const accountCountDisplay = document.getElementById('account-count');
 const toastContainer = document.getElementById('toast-container');
 
 // ─── Toast & Status ──────────────────────────────────────────────────────────
+const TOAST_ICONS = {
+  success: '✅',
+  error: '❌',
+  warning: '⚠️',
+  info: 'ℹ️',
+};
+
 function showToast(message, type = 'info') {
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
-  toast.textContent = message;
+
+  const icon = document.createElement('span');
+  icon.className = 'toast-icon';
+  icon.textContent = TOAST_ICONS[type] || 'ℹ️';
+
+  const msg = document.createElement('span');
+  msg.className = 'toast-message';
+  msg.textContent = message;
+
+  const progress = document.createElement('div');
+  progress.className = 'toast-progress';
+
+  toast.appendChild(icon);
+  toast.appendChild(msg);
+  toast.appendChild(progress);
   toastContainer.appendChild(toast);
+
   setTimeout(() => {
     if (toast.parentNode) toast.parentNode.removeChild(toast);
   }, 3000);
@@ -124,6 +146,7 @@ function renderTabs() {
     tab.className = `account-tab${acc.id === activeAccountId ? ' active' : ''}`;
     tab.textContent = `A${acc.id}`;
     tab.title = `Account ${acc.id}`;
+    tab.setAttribute('data-tooltip', `Account ${acc.id}`);
     tab.addEventListener('click', () => switchTab(acc.id));
     
     const rmBtn = document.createElement('button');
@@ -150,7 +173,7 @@ function renderTabs() {
     targetSelect.appendChild(option);
   });
 
-  accountCountDisplay.textContent = `${accountCount} / ${MAX_ACCOUNTS}`;
+  accountCountDisplay.textContent = `${accountCount} / 10`;
   addAccountBtn.disabled = accountCount >= MAX_ACCOUNTS;
 }
 
@@ -167,7 +190,7 @@ function removeAccount(id) {
   accounts.splice(index, 1);
   accountCount--;
   
-  showToast(`Account ${id} removed`, 'info');
+  showToast(`Account ${id} removed. Your session data is still saved.`, 'warning');
   
   // If we removed the active tab, switch to the first available one
   if (activeAccountId === id) {
@@ -347,6 +370,7 @@ const vaultFileList = document.getElementById('vault-file-list');
 // Toggle Vault Panel
 vaultToggleBtn.addEventListener('click', () => {
   vaultPanel.classList.toggle('hidden');
+  vaultToggleBtn.classList.toggle('active', !vaultPanel.classList.contains('hidden'));
   if (!vaultPanel.classList.contains('hidden')) {
     refreshVault();
   }
@@ -357,25 +381,39 @@ async function refreshVault() {
   const files = await window.electronAPI.listVaultFiles();
   vaultFileList.innerHTML = '';
   
+  // Update badge count
+  const countBadge = document.getElementById('vault-count');
+  if (countBadge) countBadge.textContent = files.length;
+  
   if (files.length === 0) {
-    vaultFileList.innerHTML = '<div style="color: var(--text-muted); font-size: 12px; text-align: center; padding: 20px;">Vault is empty.</div>';
+    vaultFileList.innerHTML = '<div class="vault-empty"><span class="vault-empty-icon">📂</span>No files yet.<br>Drop .md files here or download from Claude.</div>';
     return;
   }
 
   files.forEach(file => {
     const item = document.createElement('div');
     item.className = 'vault-file-item';
-    item.draggable = true; // Enable HTML5 dragging
+    item.draggable = true;
     
     // Start Electron native drag
     item.addEventListener('dragstart', (e) => {
-      // e.preventDefault(); // Temporarily removed to see if HTML5 drag fallback works
       window.electronAPI.startVaultDrag(file.name);
     });
 
     const nameSpan = document.createElement('span');
     nameSpan.className = 'vault-file-name';
-    nameSpan.textContent = file.name;
+    
+    const nameText = document.createElement('span');
+    nameText.className = 'vault-file-name-text';
+    nameText.textContent = '📄 ' + file.name;
+    
+    const sizeText = document.createElement('span');
+    sizeText.className = 'vault-file-size';
+    const sizeKB = (file.size / 1024).toFixed(1);
+    sizeText.textContent = `${sizeKB} KB`;
+    
+    nameSpan.appendChild(nameText);
+    nameSpan.appendChild(sizeText);
     nameSpan.title = file.name;
 
     const actionDiv = document.createElement('div');

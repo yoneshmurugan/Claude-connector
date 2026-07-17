@@ -14,6 +14,9 @@ const SPOOFED_UA = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/
 const SPOOFED_SEC_CH_UA = `"Chromium";v="${CHROME_MAJOR}", "Google Chrome";v="${CHROME_MAJOR}", "Not-A.Brand";v="24"`;
 
 // Set globally before any windows are created
+if (process.platform === 'darwin') {
+  app.setName('Claude Connector');
+}
 app.userAgentFallback = SPOOFED_UA;
 
 // ─── Global State ────────────────────────────────────────────────────────────
@@ -164,6 +167,11 @@ app.whenReady().then(() => {
   const menu = buildMenu();
   Menu.setApplicationMenu(menu);
 
+  // Set macOS dock icon
+  if (process.platform === 'darwin') {
+    app.dock.setIcon(path.join(__dirname, 'icon.png'));
+  }
+
   // Create the main window
   mainWindow = new BrowserWindow({
     width: 1280,
@@ -171,7 +179,10 @@ app.whenReady().then(() => {
     minWidth: 900,
     minHeight: 600,
     title: 'Claude Connector',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: '#0a0a1a',
+    icon: path.join(__dirname, 'icon.png'),
+    titleBarStyle: 'hiddenInset',
+    trafficLightPosition: { x: 16, y: 12 },
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -182,7 +193,6 @@ app.whenReady().then(() => {
   });
 
   mainWindow.loadFile('index.html');
-  mainWindow.webContents.openDevTools();
 
   mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
     console.log(`[Renderer] ${message} (${sourceId}:${line})`);
