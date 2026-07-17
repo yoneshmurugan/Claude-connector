@@ -5,7 +5,9 @@
   "main": "src/main/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win"
   },
   "keywords": [],
   "author": "",
@@ -14,26 +16,19 @@
   "build": {
     "appId": "com.claude-connector.app",
     "productName": "Claude Connector",
+    "directories": {
+      "buildResources": "assets"
+    },
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "icon": "assets/icon.png"
     },
     "win": {
-      "target": "nsis"
-    },
-    "linux": {
-      "target": "AppImage"
+      "target": "zip",
+      "icon": "assets/icon.png"
     },
     "files": [
-      "main.js",
-      "preload.js",
-      "webview-preload.js",
-      "renderer.js",
-      "scraper.js",
-      "payload-formatter.js",
-      "auto-paster.js",
-      "menu.js",
-      "index.html",
-      "styles.css",
+      "src/**/*",
       "assets/**/*"
     ]
   },
