@@ -91,8 +91,8 @@ ipcMain.handle('open-external', (_event, url) => {
 // ─── Vault Handlers ──────────────────────────────────────────────────────────
 
 const fs = require('fs');
-const vaultDir = path.join(__dirname, '../../vault');
-if (!fs.existsSync(vaultDir)) fs.mkdirSync(vaultDir);
+const vaultDir = path.join(app.getPath('userData'), 'vault');
+if (!fs.existsSync(vaultDir)) fs.mkdirSync(vaultDir, { recursive: true });
 
 ipcMain.handle('vault:list', () => {
   try {
