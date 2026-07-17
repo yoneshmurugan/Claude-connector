@@ -35,6 +35,10 @@ Designed with a beautiful, lightweight macOS-native interface, this app allows y
 > [!NOTE]
 > **macOS Users:** Because this is an unsigned open-source app, macOS Gatekeeper may show a "Malware" warning the first time you open it. 
 > To bypass this: Open **System Settings**, go to **Privacy & Security**, scroll down to the Security section, and click **Open Anyway** next to Claude Connector.
+
+> [!NOTE]
+> **Windows Users:** You may see a blue "Windows protected your PC" popup from Microsoft Defender SmartScreen. 
+> To bypass this: Click **More info**, then click the **Run anyway** button to launch the app!
 ---
 
 <br>
